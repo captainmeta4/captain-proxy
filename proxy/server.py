@@ -19,15 +19,18 @@ def api_login():
     
     if key==os.environ.get("key"):
         url=request.form.get("url")
+        name=request.form.get("device_name")
         resp=make_response(redirect("/proxy?url="+url))
         token=secrets.token_hex(32)
         resp.set_cookie("token", token)
+        c.execute("EXECUTE AddDevice(%s,%s)", (name,token))
         return resp
     else:
         abort(401)
 
 @app.route("/logout")
-def logout():    
+def logout():
+    
     resp=make_response(redirect("/login"))
     resp.set_cookie("token","")
     return resp
