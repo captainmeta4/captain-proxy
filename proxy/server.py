@@ -23,11 +23,16 @@ def api_login():
         resp.set_cookie("token", token)
         return resp
 
-@app.route("/logout"):
+@app.route("/logout")
 def logout():    
     resp=make_response(redirect("/login"))
     resp.set_cookie("token","")
     return resp
+
+@app.route("/")
+@app.route("/login")
+def login():
+    return render_template("login.html")
 
 @app.route("/proxy")
 def proxy():
