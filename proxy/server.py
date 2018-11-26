@@ -45,15 +45,18 @@ def proxy():
     
     token=request.cookies.get("token")
     if not token:
+        print('no token')
         return redirect("/login")
     
     c.execute("EXECUTE CheckDevice(%s)",(token,))
     entry=c.fetchone()
     if not entry:
+        print('token not found')
         return redirect("/login")
     
     url=request.args.get("url")
     if not url:
+        print('url not provided')
         return redirect("/login")
     
     x=requests.get(url)
