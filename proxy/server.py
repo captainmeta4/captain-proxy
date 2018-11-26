@@ -15,6 +15,7 @@ app=Flask(__name__)
 @app.route("/api/login", methods=["POST"])
 def api_login():
     key=request.form.get("key")
+    print(key)
     
     if key==os.environ.get("key"):
         url=request.form.get("url")
@@ -22,6 +23,8 @@ def api_login():
         token=secrets.token_hex(32)
         resp.set_cookie("token", token)
         return resp
+    else:
+        abort(401)
 
 @app.route("/logout")
 def logout():    
