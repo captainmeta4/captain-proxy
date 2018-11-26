@@ -59,7 +59,5 @@ def proxy():
         print('url not provided')
         return redirect("/login")
     
-    headers=request.headers
-    headers["User-Agent"]="Captainmeta4 personal rerouting service"
-    x=requests.get(url, headers=headers)
+    x=requests.get(url, headers=request.headers)
     return x.content
