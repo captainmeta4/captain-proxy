@@ -20,9 +20,10 @@ def api_login():
     if key==os.environ.get("key"):
         url=request.form.get("url")
         name=request.form.get("device_name")
-        c.execute("EXECUTE AddDevice(%s,%s)", (name,token))
-        resp=make_response(redirect("/proxy?url="+url))
         token=secrets.token_hex(32)
+        c.execute("EXECUTE AddDevice(%s,%s)", (name,token))
+        db.commit()
+        resp=make_response(redirect("/proxy?url="+url))
         resp.set_cookie("token", token)
         return resp
     else:
