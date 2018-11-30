@@ -3,6 +3,9 @@ import os
 import psycopg2
 import secrets
 import requests
+from bs4 import BeautifulSoup
+import re
+from urllib.parse import urlparse
 
 db=psycopg2.connect(os.environ.get("DATABASE_URL"))
 c=db.cursor()
@@ -43,7 +46,7 @@ def login():
 
 @app.route("/proxy")
 def proxy():
-    
+
     token=request.cookies.get("token")
     if not token:
         print('no token')
@@ -54,11 +57,44 @@ def proxy():
     if not entry:
         print('token not found')
         return redirect("/login")
+
     
     url=request.args.get("url")
     if not url:
         print('url not provided')
         return redirect("/login")
+    else:
+        print(url)
+
+ 
+    x=requests.get(url, headers={"User-Agent":"Captain's Redirection service"})
+    print(x.status_code)
     
-    x=requests.get(url, headers=request.headers)
-    return x.content
+    if x.headers["Content-Type"].startswith("text/html"):
+        soup=BeautifulSoup(x.content, features="html.parser")
+        o=urlparse(url)
+
+        #replace src and href tags with http(s) notation
+        for tag in soup.find_all(href=re.compile("^http")):
+            tag['href']="/proxy?url="+tag['href']
+        for tag in soup.find_all(src=re.compile("^http")):
+            tag['src']="/proxy?url="+tag['src']
+
+        #replace src and href tags using / notation to indicate a file on same domain
+        for tag in soup.find_all(href=re.compile("^/[^/]")):
+            tag['href']="/proxy?url="+o.scheme+"://"+o.netloc+tag['href']
+        for tag in soup.find_all(src=re.compile("^/[^/]")):
+            tag['src']="/proxy?url="+o.scheme+"://"+o.netloc+tag['src']
+
+        #replace src and href tags using // notation to indicate a file on another domain
+        for tag in soup.find_all(href=re.compile("^//")):
+            tag['href']="/proxy?url="+o.scheme+":"+tag['href']
+        for tag in soup.find_all(src=re.compile("^//")):
+            tag['src']="/proxy?url="+o.scheme+":"+tag['src']
+        resp=make_response(str(soup), x.status_code)
+    else:
+        resp=make_response(x.content, x.status_code)
+
+    resp.headers["Content-Type"]=x.headers["Content-Type"]
+
+    return resp
