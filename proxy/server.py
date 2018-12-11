@@ -44,19 +44,38 @@ def logout():
 def login():
     return render_template("login.html")
 
-@app.route("/proxy")
-def proxy():
-
-    token=request.cookies.get("token")
-    if not token:
-        print('no token')
-        return redirect("/login")
+def check_token(f):
     
-    c.execute("EXECUTE CheckDevice(%s)",(token,))
-    entry=c.fetchone()
-    if not entry:
-        print('token not found')
-        return redirect("/login")
+    def wrapper():
+    
+        token=request.cookies.get("token")
+        if not token:
+            print('no token')
+            return redirect("/login")
+    
+        c.execute("EXECUTE CheckDevice(%s)",(token,))
+        entry=c.fetchone()
+        if not entry:
+            print('token not found')
+            return redirect("/login")
+        
+        return f()
+
+    wrapper.__name__=f.__name__
+    return wrapper
+
+@app.route("/proxy", methods=["POST"])
+@check_token
+def proxy_post():
+    
+    url=request.args.get("url")
+    x=requests.post(url, data=request.values)
+    
+    return x.content, request.status_code
+
+@app.route("/proxy", methods=["GET"])
+@check_token
+def proxy_get():
 
     
     url=request.args.get("url")
