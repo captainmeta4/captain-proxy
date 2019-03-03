@@ -624,10 +624,11 @@ class TCP(object):
 
     def run(self):
         try:
-            logger.info('Starting server on port %d' % self.port)
+            logger.info('Starting server at %s port %d'.format(self.hostname, self.port))
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             self.socket.bind((self.hostname, self.port))
+            logger.info("bound")
             self.socket.listen(self.backlog)
             while True:
                 conn, addr = self.socket.accept()
