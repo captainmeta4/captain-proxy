@@ -613,7 +613,7 @@ class TCP(object):
     Subclass MUST implement `handle` method. It accepts an instance of accepted `Client` connection.
     """
 
-    def __init__(self, hostname='127.0.0.1', port=os.environ.get("PORT"), backlog=100):
+    def __init__(self, hostname='127.0.0.1', port=8899, backlog=100):
         self.hostname = hostname
         self.port = port
         self.backlog = backlog
@@ -678,7 +678,7 @@ def main():
     )
 
     parser.add_argument('--hostname', default='127.0.0.1', help='Default: 127.0.0.1')
-    parser.add_argument('--port', default='8899', help='Default: 8899')
+    parser.add_argument('--port', default=os.environ.get("PORT", '8899'), help='Default: 8899')
     parser.add_argument('--backlog', default='100', help='Default: 100. '
                                                          'Maximum number of pending connections to proxy server')
     parser.add_argument('--basic-auth', default=None, help='Default: No authentication. '
