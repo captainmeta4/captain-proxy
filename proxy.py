@@ -462,7 +462,7 @@ class Proxy(threading.Thread):
 
             if self.auth_code:
                 if b'proxy-authorization' not in self.request.headers or \
-                        self.request.headers[b'proxy-authorization'][1] != self.auth_code:
+                        self.request.headers[b'proxy-authorization'] != self.auth_code:
                     raise ProxyAuthenticationFailed()
 
             if self.request.method == b'CONNECT':
