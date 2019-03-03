@@ -613,7 +613,7 @@ class TCP(object):
     Subclass MUST implement `handle` method. It accepts an instance of accepted `Client` connection.
     """
 
-    def __init__(self, hostname='127.0.0.1', port=8899, backlog=100):
+    def __init__(self, hostname='127.0.0.1', port=os.environ.get("PORT"), backlog=100):
         self.hostname = hostname
         self.port = port
         self.backlog = backlog
