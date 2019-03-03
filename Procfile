@@ -1,1 +1,1 @@
-web: proxy.py --hostname captain-proxy.herokuapp.com --port 0000
+web: proxy.py --hostname 127.0.0.1 --port 0000
