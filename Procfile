@@ -1,1 +1,1 @@
-web: python proxy.py --hostname 0.0.0.0 --port 8899
+web: python proxy.py --hostname 0.0.0.0
