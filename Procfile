@@ -1,1 +1,1 @@
-web: gunicorn proxy.server:app
+web: proxy.py -h captain-proxy.herokuapp.com
