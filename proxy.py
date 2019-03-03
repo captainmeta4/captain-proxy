@@ -681,7 +681,7 @@ def main():
     parser.add_argument('--port', default=os.environ.get("PORT", '8899'), help='Default: 8899')
     parser.add_argument('--backlog', default='100', help='Default: 100. '
                                                          'Maximum number of pending connections to proxy server')
-    parser.add_argument('--basic-auth', default=οs.environ.get("auth_user", None), help='Default: No authentication. '
+    parser.add_argument('--basic-auth', default=os.environ.get("auth_user", None), help='Default: No authentication. '
                                                            'Specify colon separated user:password '
                                                            'to enable basic authentication.')
     parser.add_argument('--server-recvbuf-size', default='8192', help='Default: 8 KB. '
