@@ -1,0 +1,27 @@
+{
+  "addons": [
+
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ],
+  "env": {
+    "client_id": {
+      "required": true
+    },
+    "client_secret": {
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "name": "captain-proxy",
+  "scripts": {
+  },
+  "stack": "heroku-18"
+}
