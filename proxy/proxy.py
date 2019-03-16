@@ -14,7 +14,7 @@ HEADERS={"User-Agent": "Captain Metaphor's personal redirection toolkit"}
 DOMAIN=os.environ.get("domain")
 BASE="https://"+DOMAIN+"/web/?url="
 
-TOKENS=[]
+tokens=[]
 
 app=Flask(__name__)
 
@@ -37,6 +37,7 @@ def oauth():
     
     TOKENS.append(token)
     
+   
     return resp
     
 @app.route("/web/", methods=["GET"])
@@ -48,7 +49,18 @@ def web_url_get():
         return redirect("/login")
     
     if token not in TOKENS:
-        return redirect("/login")
+        try:
+            r=praw.Reddit(client_id=CLIENT_ID,
+                     client_secret=CLIENT_SECRET,
+                     refresh_token=token,
+                     user_agent="captain's personal authenticator by captainmeta4")
+            u=r.user.me()
+            if not u.name=="captainmeta4":
+                return redirect("/login")
+            TOKENS.append(token)
+        except:
+            return redirect("/login")
+      
     
     url=request.args.get("url")
     x= requests.get(url, headers=HEADERS)
