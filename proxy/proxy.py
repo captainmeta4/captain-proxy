@@ -14,7 +14,7 @@ HEADERS={"User-Agent": "Captain Metaphor's personal redirection toolkit"}
 DOMAIN=os.environ.get("domain")
 BASE="https://"+DOMAIN+"/web/?url="
 
-tokens=[]
+TOKENS=[]
 
 app=Flask(__name__)
 
