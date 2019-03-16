@@ -14,6 +14,8 @@ HEADERS={"User-Agent": "Captain Metaphor's personal redirection toolkit"}
 DOMAIN=os.environ.get("domain")
 BASE="https://"+DOMAIN+"/web/?url="
 
+TOKENS=[]
+
 app=Flask(__name__)
 
 @app.route("/login")
@@ -33,10 +35,20 @@ def oauth():
     resp=make_response(redirect("/web?url=https://reddit.com"))
     resp.set_cookie("token",token,domain=os.environ.get("domain"))
     
+    TOKENS.append(token)
+    
     return resp
     
 @app.route("/web/", methods=["GET"])
 def web_url_get():
+    
+    token=request.cookies.get("token")
+    
+    if not token:
+        return redirect("/login")
+    
+    if token not in TOKENS:
+        return redirect("/login")
     
     url=request.args.get("url")
     x= requests.get(url, headers=HEADERS)
