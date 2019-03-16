@@ -33,19 +33,20 @@ def oauth():
         return "You are not authorized to use this application", 401
     
     resp=make_response(redirect("/web?url=https://reddit.com"))
-    resp.set_cookie("token",token,domain=os.environ.get("domain"))
+    resp.set_cookie("token",token,domain=DOMAIN)
     
     TOKENS.append(token)
-    
-   
+    print(TOKENS)
     return resp
     
 @app.route("/web/", methods=["GET"])
 def web_url_get():
     
-    token=request.cookies.get("token")
+    token=request.cookies.get("token", None)
+    print(token)
     
     if not token:
+        print('no token')
         return redirect("/login")
     
     if token not in TOKENS:
@@ -56,9 +57,11 @@ def web_url_get():
                      user_agent="captain's personal authenticator by captainmeta4")
             u=r.user.me()
             if not u.name=="captainmeta4":
+                print('bad token')
                 return redirect("/login")
             TOKENS.append(token)
         except:
+            print("could not validate token")
             return redirect("/login")
       
     
