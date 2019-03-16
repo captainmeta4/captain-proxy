@@ -77,6 +77,14 @@ def web_url_get():
     if x.headers["Content-Type"].startswith("text/html"):
         soup=BeautifulSoup(x.content, features="html.parser")
         
+        for tag in soup.find_all(rel="stylesheet"):
+            if request.args.get("nocss",None):
+                tag.decompose()
+        
+        for tag in soup.find_all("script"):
+            if request.args.get("noscript", None):
+                tag.decompose()
+        
         
         for tag in soup.find_all(href=True):
             p=urlparse(tag['href'])
