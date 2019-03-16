@@ -1,1 +1,1 @@
-web: python proxy.py --hostname 0.0.0.0
+web: gunicorn proxy.proxy:app
