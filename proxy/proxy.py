@@ -50,19 +50,19 @@ def web_url_get():
         return redirect("/login")
     
     if token not in TOKENS:
-        try:
-            r=praw.Reddit(client_id=CLIENT_ID,
-                     client_secret=CLIENT_SECRET,
-                     refresh_token=token,
-                     user_agent="captain's personal authenticator by captainmeta4")
-            u=r.user.me()
-            if not u.name=="captainmeta4":
-                print('bad token')
-                return redirect("/login")
-            TOKENS.append(token)
-        except:
-            print("could not validate token")
+        #try:
+        r=praw.Reddit(client_id=CLIENT_ID,
+                 client_secret=CLIENT_SECRET,
+                 refresh_token=token,
+                 user_agent="captain's personal authenticator by captainmeta4")
+        u=r.user.me()
+        if not u.name=="captainmeta4":
+            print('bad token')
             return redirect("/login")
+        TOKENS.append(token)
+    #except:
+    #    print("could not validate token")
+    #    return redirect("/login")
       
     
     url=request.args.get("url")
