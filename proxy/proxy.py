@@ -35,12 +35,17 @@ def oauth():
     if not u.name=="captainmeta4":
         return "You are not authorized to use this application", 401
     
-    resp=make_response(redirect("/web?url=https://reddit.com"))
+    resp=make_response(render_template("home.html"))
     resp.set_cookie("token",token,domain=DOMAIN)
     
     TOKENS.append(token)
     print(TOKENS)
     return resp
+  
+@app.route("/web", methods=["POST"])
+def web_post():
+    
+    return redirect("/web/?url={}".format(request.form.get("entry")))
     
 @app.route("/web/", methods=["GET"])
 def web_url_get():
