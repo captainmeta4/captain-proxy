@@ -5,8 +5,11 @@ import praw
 from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 
-r=praw.Reddit(client_id=os.environ.get("client_id"),
-              client_secret=os.environ.get("client_secret"),
+CLIENT_ID=os.environ.get("client_id")
+CLIENT_SECRET=os.environ.get("client_secret")
+
+r=praw.Reddit(client_id=CLIENT_ID,
+              client_secret=CLIENT_SECRET,
               redirect_uri="https://proxy.captainmeta4.me/oauth",
               user_agent="captain's personal authenticator by captainmeta4")
 
